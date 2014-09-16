@@ -61,7 +61,7 @@ class AllModels extends Command implements CommandsInterface
     public function run($parameters)
     {
 
-        $path = '';
+        $path = './';
         if ($this->isReceivedOption('directory')) {
             $path = $this->getOption('directory') . '/';
         }
@@ -69,12 +69,21 @@ class AllModels extends Command implements CommandsInterface
         $config = null;
         if (!$this->isReceivedOption('models')) {
 
-            $fileType = file_exists($path . "app/config/config.ini") ? "ini" : "php";
-
-            if ($this->isReceivedOption('config')) {
-                $configPath = $path.$this->getOption('config')."/config.".$fileType;
-            } else {
-                $configPath = $path."app/config/config." . $fileType;
+            if (file_exists($path . "app/config/config.ini")) {
+              $configPath = $path . "app/config/config.ini";
+              $fileType = "ini";
+            }
+            elseif (file_exists($path . "app/config/config.php")) {
+              $configPath = $path . "app/config/config.php";
+              $fileType = "php";
+            }
+            elseif (file_exists($path . "config/config.ini")) {
+              $configPath = $path . "config/config.ini";
+              $fileType = "ini";
+            }
+            else {
+              $configPath = $path . "config/config.php";
+              $fileType = "php";
             }
 
             if ($fileType == 'ini') {
@@ -83,9 +92,13 @@ class AllModels extends Command implements CommandsInterface
                 $config = include $configPath;
             }
 
-            if (file_exists($path.'public')) {
+            if(file_exists($path.'models_tmp')) {
+                $modelsDir = 'models_tmp';
+            }
+            elseif (file_exists($path.'public')) {
                 $modelsDir = 'public/'.$config->application->modelsDir;
-            } else {
+            }
+            else {
                 $modelsDir = $config->application->modelsDir;
             }
         } else {

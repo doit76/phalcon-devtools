@@ -68,7 +68,6 @@ abstract class Component
                 }
             }
         }
-
         $directory = new \RecursiveDirectoryIterator('.');
         $iterator = new \RecursiveIteratorIterator($directory);
         foreach ($iterator as $f) {

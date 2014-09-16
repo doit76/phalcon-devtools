@@ -58,7 +58,12 @@ class AllModels extends Component
         }
 
         $config = $this->_getConfig($path . '/');
-        $modelsDir = $config->application->modelsDir;
+        if(isset($config->application)) {
+            $modelsDir = $config->application->modelsDir;
+        } else {
+            $modelsDir = 'models_tmp';
+        }
+        // $modelsDir = $config->application->modelsDir;
         $forceProcess = $this->_options['force'];
 
         if (isset($this->_options['defineRelations'])) {

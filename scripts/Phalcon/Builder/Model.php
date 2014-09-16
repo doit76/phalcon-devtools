@@ -242,16 +242,20 @@ class Model extends Component
         } else {
             $path = '.';
         }
-
+var_dump($this->_getConfig($path));
         $config = $this->_getConfig($path);
 
         if (!isset($this->_options['modelsDir'])) {
-            if (!isset($config->application->modelsDir)) {
+            if (!isset($config->application->modelsDir) || !file_exists('models_tmp')) {
                 throw new BuilderException(
                     "Builder doesn't knows where is the models directory"
                 );
             }
-            $modelsDir = $config->application->modelsDir;
+            if(isset($config->application)) {
+                $modelsDir = $config->application->modelsDir;
+            } else {
+                $modelsDir = 'models_tmp';
+            }
         } else {
             $modelsDir = $this->_options['modelsDir'];
         }            
